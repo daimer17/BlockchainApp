@@ -30,7 +30,6 @@ foreach (var peer in savedPeers)
         Console.WriteLine($"Peer {peer} is offline.");
     }
 }
-
 Console.Write("Введіть порт для цієї ноди: ");
 int port = int.Parse(Console.ReadLine()!);
 
@@ -397,19 +396,26 @@ while (true)
             break;
 
         case "10":
+            {
+                var coldWallet =
+                    new ColdWalletService();
 
-            var coldWallet =
-                new ColdWalletService();
+                using var rsa =
+                    System.Security.Cryptography.RSA.Create();
 
-            coldWallet.GenerateOfflineTransaction(
-                "Alice",
-                "Bob",
-                100,
-                1,
-                "PRIVATE_KEY",
-                "offline_tx.json");
+                string privateKey =
+                    rsa.ToXmlString(true);
 
-            break;
+                coldWallet.GenerateOfflineTransaction(
+                    "Alice",
+                    "Bob",
+                    100,
+                    1,
+                    privateKey,
+                    "offline_tx.json");
+
+                break;
+            }
 
         case "11":
 

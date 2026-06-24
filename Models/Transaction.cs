@@ -12,6 +12,7 @@ namespace BlockchainApp.Models
         public decimal Fee { get; set; }
         public string TokenSymbol { get; set; } = "MAIN";
         public string Signature { get; set; } = string.Empty;
+        public string PublicKey { get; set; } = string.Empty;
         public decimal Amount { get; set; }
         public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
         public int LockTime { get; set; } = 0;

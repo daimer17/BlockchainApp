@@ -288,7 +288,6 @@ namespace BlockchainApp.Service
             if (!File.Exists(filePath))
             {
                 Console.WriteLine("File not found.");
-
                 return false;
             }
 
@@ -301,17 +300,28 @@ namespace BlockchainApp.Service
             if (tx == null)
             {
                 Console.WriteLine("Invalid file.");
-
                 return false;
             }
 
-            if (string.IsNullOrEmpty(tx.Signature))
+            var rsaService =
+                new RSAService();
+
+            bool validSignature =
+                rsaService.VerifySignature(
+                    tx.ToRawString(),
+                    tx.Signature,
+                    tx.PublicKey);
+
+            if (!validSignature)
             {
                 Console.WriteLine(
-                    "Signature verification failed.");
+                    "RSA signature invalid!");
 
                 return false;
             }
+
+            Console.WriteLine(
+                "RSA signature verified.");
 
             return AddTransaction(tx);
         }

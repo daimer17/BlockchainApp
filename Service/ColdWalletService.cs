@@ -1,5 +1,6 @@
 ﻿using BlockchainApp.Models;
 using System.Text.Json;
+using System.Security.Cryptography;
 
 namespace BlockchainApp.Service
 {
@@ -20,7 +21,20 @@ namespace BlockchainApp.Service
 
             tx.Fee = fee;
 
-            tx.Signature = "SIGNED";
+            using RSA rsa = RSA.Create();
+
+            rsa.FromXmlString(privateKey);
+
+            tx.PublicKey =
+                rsa.ToXmlString(false);
+
+            var rsaService =
+                new RSAService();
+
+            tx.Signature =
+                rsaService.SignData(
+                    tx.ToRawString(),
+                    privateKey);
 
             string json =
                 JsonSerializer.Serialize(
